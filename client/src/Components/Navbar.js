@@ -360,37 +360,37 @@ export default function Navbar() {
             // )} */}
         </>
         )}
-              {/* {userInfo && (userInfo.role === 'admin') && (
-              <>
-              <List component="nav">
-                  <ListItem
-                    button
-                    aria-haspopup="true"
-                    aria-controls="lock-menu"
-                    aria-label='Admin' 
-                    onClick={handleClickListItem}
+          {userInfo && (userInfo.role === 'admin') && (
+          <>
+          <List component="nav">
+              <ListItem
+                button
+                aria-haspopup="true"
+                aria-controls="lock-menu"
+                aria-label='Admin' 
+                onClick={handleClickListItem}
+              >
+                <ListItemText primary='Admin' variant='h6'/>
+                <i className='fa fa-caret-down'></i>
+                <Menu
+                  id="lock-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}  
+                > 
+                  <MenuItem 
+                    component={ Link }
+                    to='/admin/orderlist'
+                    variant='h6'
                   >
-                    <ListItemText primary='Admin' variant='h6'/>
-                    <i className='fa fa-caret-down'></i>
-                    <Menu
-                      id="lock-menu"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}  
-                    > 
-                      <MenuItem 
-                        component={ Link }
-                        to='/orderlist'
-                        variant='h6'
-                      >
-                        Orders
-                      </MenuItem>   
-                    </Menu> 
-                    </ListItem>
-                    </List>  
-        </>
-        )} */}
+                    Orders
+                  </MenuItem>   
+                </Menu> 
+                </ListItem>
+                </List>  
+    </>
+    )}
       </>  
       )
       }    

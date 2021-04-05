@@ -15,6 +15,7 @@ import UserProfileScreen from '../Container/UserProfile';
 import ProductListScreen from '../Container/ProductList';
 import ProductEditScreen from '../Container/ProductEdit';
 import OrderListScreen from '../Container/OrderList';
+import AdminOrderListScreen from '../Container/AdminOrderList';
 import UserListScreen from '../Container/UserList';
 import UserEditScreen from '../Container/UserEdit';
 import ProductCreateScreen from '../Container/ProductCreate';
@@ -50,7 +51,7 @@ function App() {
             <SuperAdminRoute path='/productList' component={ProductListScreen} />
             <SuperAdminRoute path='/product/create' component={ProductCreateScreen} />
             <SuperAdminRoute path='/orderlist' exact component={OrderListScreen} />
-            <AdminRoute path='/orderlist/admin' component={OrderListScreen} />
+            <AdminRoute path='/admin/orderlist' component={AdminOrderListScreen} />
             <SuperAdminRoute path='/userlist' component={UserListScreen} />
             <SuperAdminRoute path='/user/create' exact component={UserCreateScreen} />
             <SuperAdminRoute path='/user/:id/edit' exact component={UserEditScreen} />

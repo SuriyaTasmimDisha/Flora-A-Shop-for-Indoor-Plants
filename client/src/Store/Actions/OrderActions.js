@@ -21,7 +21,14 @@ import {
   ORDER_DELIVER_FAIL,
   ORDER_STATUS_UPDATE_SUCCESS,
   ORDER_STATUS_UPDATE_REQUEST,
-  ORDER_STATUS_UPDATE_FAIL
+  ORDER_STATUS_UPDATE_FAIL,
+  ORDER_LIST_ADMIN_SUCCESS,
+  ORDER_LIST_ADMIN_FAIL,
+  ORDER_LIST_ADMIN_REQUEST,
+  ORDER_STATUS_UPDATE_REQUEST_ADMIN,
+  ORDER_STATUS_UPDATE_FAIL_ADMIN,   
+  ORDER_STATUS_UPDATE_SUCCESS_ADMIN,
+  ORDER_STATUS_UPDATE_RESET_ADMIN  
 } from '../../Constants/OrderConstants';
 
 export const createOrder = (order) => async (dispatch, getState) => {
@@ -107,6 +114,26 @@ export const listOrders = () => async (dispatch, getState) => {
   }
 };
 
+export const adminListOrders = () => async (dispatch, getState) => {
+  dispatch({ type: ORDER_LIST_ADMIN_REQUEST });
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await axios.get(`/orders/${userInfo.role}`, {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    console.log(data);
+    dispatch({ type: ORDER_LIST_ADMIN_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: ORDER_LIST_ADMIN_FAIL, payload: message });
+  }
+};
+
 export const deleteOrder = (orderId) => async (dispatch, getState) => {
   dispatch({ type: ORDER_DELETE_REQUEST, payload: orderId });
   const {
@@ -168,5 +195,27 @@ export const updateOrderStatus = (order) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     dispatch({ type: ORDER_STATUS_UPDATE_FAIL, payload: message });
+  }
+};
+
+export const updateOrderStatusAdmin = (order) => async (dispatch, getState) => {
+  dispatch({ type: ORDER_STATUS_UPDATE_REQUEST_ADMIN, payload: order });
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await axios.patch(
+      `/orders/admin/${order._id}`, order,
+      {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      }
+    );
+    dispatch({ type: ORDER_STATUS_UPDATE_SUCCESS_ADMIN, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: ORDER_STATUS_UPDATE_FAIL_ADMIN, payload: message });
   }
 };

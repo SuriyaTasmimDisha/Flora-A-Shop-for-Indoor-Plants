@@ -3,7 +3,7 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Product = require('../models/Products');
 const {verifyUser} = require('../verifyToken');
-const {superAdminAccess, superAdminOrAdminAccess, currentUser} = require('../controller/userAccessController');
+const {superAdminAccess, adminAccess, currentUser} = require('../controller/userAccessController');
 
 //Make an order for product
 router.post('/', verifyUser, currentUser, async(req, res, next) => {
@@ -31,8 +31,17 @@ try {
   }
 });
 
+//Super Admin: Get full order-list
+router.get('/', verifyUser, superAdminAccess, async(req, res) => {
+  try {
+    const orders = await Order.find({}).populate('user', 'name'); 
+    res.status(200).send(orders);
+  } catch (error) {
+    res.status(404).send('Not Found');
+  }
+});
 //Admin: Get full order-list
-router.get('/', verifyUser, superAdminOrAdminAccess, async(req, res) => {
+router.get('/admin', verifyUser, adminAccess, async(req, res) => {
   try {
     const orders = await Order.find({}).populate('user', 'name'); 
     res.status(200).send(orders);
@@ -76,7 +85,7 @@ router.delete('/:id', verifyUser, superAdminAccess, async(req, res) => {
 });
 
 //Admin: Get pending order list
-router.get('/pending', verifyUser, superAdminOrAdminAccess, async(req, res) => {
+router.get('/pending', verifyUser, adminAccess, async(req, res) => {
   try {
     const data = await Order.find({order_status: 'pending'});
     res.status(200).send(data);
@@ -85,8 +94,21 @@ router.get('/pending', verifyUser, superAdminOrAdminAccess, async(req, res) => {
   }
 });
 
+//Super Admin: Change Order Status
+router.patch('/:orderId', verifyUser, superAdminAccess, async(req, res) => {
+  try {
+  const order = await Order.findById(req.params.orderId);
+        order.status = req.body.status;
+
+  const updatedOrder = await order.save();
+  res.status(200).send(updatedOrder);
+  } catch (error) {
+    res.status(400).send('Order not found.');
+  }
+});
+
 //Admin: Change Order Status
-router.patch('/:orderId', verifyUser, superAdminOrAdminAccess, async(req, res) => {
+router.patch('/admin/:orderId', verifyUser, adminAccess, async(req, res) => {
   try {
   const order = await Order.findById(req.params.orderId);
         order.status = req.body.status;

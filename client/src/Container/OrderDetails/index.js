@@ -11,7 +11,6 @@ export default function OrderDetails(props) {
   const [status, setOrderStatus] = useState('');
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
-  console.log(order);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const orderStatusUpdate = useSelector((state) => state.orderStatusUpdate);

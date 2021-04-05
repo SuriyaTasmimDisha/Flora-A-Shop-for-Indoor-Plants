@@ -23,7 +23,14 @@ import {
   ORDER_STATUS_UPDATE_SUCCESS,
   ORDER_STATUS_UPDATE_REQUEST,
   ORDER_STATUS_UPDATE_FAIL,
-  ORDER_STATUS_UPDATE_RESET
+  ORDER_STATUS_UPDATE_RESET,
+  ORDER_LIST_ADMIN_SUCCESS,
+  ORDER_LIST_ADMIN_FAIL,
+  ORDER_LIST_ADMIN_REQUEST,
+  ORDER_STATUS_UPDATE_REQUEST_ADMIN,
+  ORDER_STATUS_UPDATE_FAIL_ADMIN,   
+  ORDER_STATUS_UPDATE_SUCCESS_ADMIN,
+  ORDER_STATUS_UPDATE_RESET_ADMIN  
 } from '../../Constants/OrderConstants';
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -80,6 +87,19 @@ export const orderListReducer = (state = { orders: [] }, action) => {
   }
 };
 
+export const adminOrderListReducer = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case ORDER_LIST_ADMIN_REQUEST:
+      return { loading: true };
+    case ORDER_LIST_ADMIN_SUCCESS:
+      return { loading: false, orders: action.payload };
+    case ORDER_LIST_ADMIN_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
 export const orderDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_DELETE_REQUEST:
@@ -119,6 +139,21 @@ export const orderStatusUpdateReducer = (state = {}, action) => {
     case ORDER_STATUS_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case ORDER_STATUS_UPDATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const orderStatusUpdateAdminReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_STATUS_UPDATE_REQUEST_ADMIN:
+      return { loading: true };
+    case ORDER_STATUS_UPDATE_SUCCESS_ADMIN:
+      return { loading: false, success: true };
+    case ORDER_STATUS_UPDATE_FAIL_ADMIN:
+      return { loading: false, error: action.payload };
+    case ORDER_STATUS_UPDATE_RESET_ADMIN:
       return {};
     default:
       return state;

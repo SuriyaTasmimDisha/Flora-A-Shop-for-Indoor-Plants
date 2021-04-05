@@ -38,7 +38,7 @@ function superAdminAccess(req, res, next) {
 }
 
 //Admin access
-function superAdminOrAdminAccess(req, res, next) {
+function adminAccess(req, res, next) {
     const token = req.cookies.user;
 
   if(token){
@@ -48,16 +48,15 @@ function superAdminOrAdminAccess(req, res, next) {
         next();
       } else{
         const user = await User.findById(decodedToken._id);
-        if( user.role === 'admin' || user.role === 'super admin') {
-          console.log(user.role);
+        if( user.role === 'admin') {
+          // console.log(user.role);
           next();
         } else {
            res.status(403).send('Restricted Access');
         } 
       }
-      next();
     });
   }
 }
 
-module.exports = {currentUser, superAdminAccess, superAdminOrAdminAccess}
+module.exports = {currentUser, superAdminAccess, adminAccess}
