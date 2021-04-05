@@ -85,12 +85,13 @@ router.delete('/:id', verifyUser, superAdminAccess, async(req, res) => {
 });
 
 //Admin: Get pending order list
-router.get('/pending', verifyUser, adminAccess, async(req, res) => {
+router.get('/admin/:status', verifyUser, adminAccess, async(req, res) => {
   try {
-    const data = await Order.find({order_status: 'pending'});
+    const status = req.params.status;
+    const data = await Order.find({status: status});
     res.status(200).send(data);
   } catch (error) {
-    res.status(400).send("Pending list not found!");
+    res.status(400).send(`${status} list not found!`);
   }
 });
 

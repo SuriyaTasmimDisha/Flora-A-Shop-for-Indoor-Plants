@@ -1,42 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBox from '../../Components/LoadingBox';
 import MessageBox from '../../Components/MessageBox';
-import { ORDER_STATUS_UPDATE_RESET } from '../../Constants/OrderConstants';
-import { detailsOrder, updateOrderStatus } from '../../Store/Actions/OrderActions';
+import { detailsOrder } from '../../Store/Actions/OrderActions';
 
 export default function OrderDetails(props) {
   const orderId = props.match.params.id;
-  const [status, setOrderStatus] = useState('');
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-  const orderStatusUpdate = useSelector((state) => state.orderStatusUpdate);
-  const {
-    loading: loadingStatusUpdate,
-    error: errorStatusUpdate,
-    success: successStatusUpdate,
-  } = orderStatusUpdate;
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (successStatusUpdate) {
-      props.history.push('/orderlist');
-    }
-    if(!order || order._id !== orderId || successStatusUpdate){
-      dispatch({ type: ORDER_STATUS_UPDATE_RESET });
       dispatch(detailsOrder(orderId));
-    } else{
-      setOrderStatus(order.status);
-    }
-  }, [order, dispatch, orderId, successStatusUpdate, props.history]);
-
-  const orderStatusHandler = (e) => {
-    e.preventDefault();
-    dispatch(updateOrderStatus({_id: orderId, status}));
-  };
+  }, [dispatch, orderId]);
 
   return (
     loading ? (<LoadingBox></LoadingBox>) :
@@ -87,6 +64,8 @@ export default function OrderDetails(props) {
                     Not Paid
                   </MessageBox>
                 )}
+                <h2>Order status: </h2>
+                <p>{order.status}</p>
               <div className="card card-body">
                 <h2>Order Items</h2>
                 <ul>
@@ -141,28 +120,6 @@ export default function OrderDetails(props) {
                     <strong>${order.totalPrice.toFixed(2)}</strong>
                   </div>
                 </div>
-              </li>
-              <li>
-              <label> Order Status: {order.status} </label>
-              {(userInfo.role === 'super admin' || userInfo.role === 'admin') && (
-                <>
-                  <select
-                    name='orderStatus'
-                    id='orderStatus'
-                    onChange={(e) => setOrderStatus(e.target.value)}
-                  >
-                  <option value='Pending'>Pending</option>  
-                  <option value='Accepted'>Accepted</option>  
-                  <option value='Delivered'>Delivered</option>
-                  </select>
-                  <button 
-                  type="submit"
-                  onClick={orderStatusHandler}
-                  >
-                  Update Order Status
-                 </button>
-                </>
-              )}
               </li>
             </ul>
           </div>

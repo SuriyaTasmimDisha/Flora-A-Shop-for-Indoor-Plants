@@ -234,8 +234,8 @@ export default function Navbar() {
                     Register
                   </Typography>
               }
-                {userInfo ? (
                   <>
+                {userInfo ? (
                       <List component="nav">
                       <ListItem
                         button
@@ -279,7 +279,6 @@ export default function Navbar() {
                     </Menu> 
                     </ListItem>
                     </List>           
-                  </>
               ) : (
                     <Typography 
                       component={Link}
@@ -288,9 +287,9 @@ export default function Navbar() {
                     >
                       Login
                     </Typography>
-              )}
-              {userInfo && (userInfo.role === 'super admin') && (
+              )} </>
               <>
+              {userInfo && (userInfo.role === 'super admin') && (
               <List component="nav">
                   <ListItem
                     button
@@ -334,33 +333,10 @@ export default function Navbar() {
                     </Menu> 
                     </ListItem>
                     </List>   
-            {/* //   <Link to="#admin">
-            //     <Typography variant='h6'>Super Admin 
-            //     <i className="fa fa-caret-down"></i>
-            //     </Typography>
-            //   </Link>
-            //   <ul className="dropdown-content">
-            //     <li>
-            //       <Link to="/productlist">
-            //         <Typography variant='h6'>Products</Typography>
-            //       </Link>
-            //     </li>
-            //     <li>
-            //       <Link to="/orderlist">
-            //         <Typography variant='h6'>Orders</Typography>
-            //       </Link>
-            //     </li>
-            //     <li>
-            //       <Link to="/userlist">
-            //         <Typography variant='h6'>Users</Typography>
-            //       </Link>
-            //     </li>
-            //   </ul>
-            // </div>
-            // )} */}
-        </>
-        )}
-          {userInfo && (userInfo.role === 'admin') && (
+            
+            )}
+            </>
+          {/* {userInfo && (userInfo.role === 'admin') && (
           <>
           <List component="nav">
               <ListItem
@@ -390,7 +366,7 @@ export default function Navbar() {
                 </ListItem>
                 </List>  
     </>
-    )}
+    )} */}
       </>  
       )
       }    

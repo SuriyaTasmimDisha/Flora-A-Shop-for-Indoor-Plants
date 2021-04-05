@@ -28,7 +28,9 @@ import {
   ORDER_STATUS_UPDATE_REQUEST_ADMIN,
   ORDER_STATUS_UPDATE_FAIL_ADMIN,   
   ORDER_STATUS_UPDATE_SUCCESS_ADMIN,
-  ORDER_STATUS_UPDATE_RESET_ADMIN  
+  ORDER_LIST_BY_STATUS_ADMIN_SUCCESS,
+  ORDER_LIST_BY_STATUS_ADMIN_FAIL,   
+  ORDER_LIST_BY_STATUS_ADMIN_REQUEST  
 } from '../../Constants/OrderConstants';
 
 export const createOrder = (order) => async (dispatch, getState) => {
@@ -217,5 +219,25 @@ export const updateOrderStatusAdmin = (order) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     dispatch({ type: ORDER_STATUS_UPDATE_FAIL_ADMIN, payload: message });
+  }
+};
+
+export const adminListOrdersByStatus = () => async (dispatch, getState) => {
+  dispatch({ type: ORDER_LIST_BY_STATUS_ADMIN_REQUEST });
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  try {
+    const { data } = await axios.get(`/orders/admin/pending`, {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    console.log(data);
+    dispatch({ type: ORDER_LIST_BY_STATUS_ADMIN_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: ORDER_LIST_BY_STATUS_ADMIN_FAIL, payload: message });
   }
 };

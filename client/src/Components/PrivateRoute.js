@@ -9,7 +9,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
         <Route
         { ...rest }
         render={(props) => 
-            userInfo ? (
+            (userInfo || userInfo.role === 'super admin') ? (
                 <Component {...props}></Component>
             ) : (
                 <Redirect to='/login' />

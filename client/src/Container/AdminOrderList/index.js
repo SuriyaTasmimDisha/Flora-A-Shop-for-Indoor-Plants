@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { adminListOrders, deleteOrder, updateOrderStatusAdmin } from '../../Store/Actions/OrderActions';
+import { adminListOrders, updateOrderStatusAdmin } from '../../Store/Actions/OrderActions';
 import LoadingBox from '../../Components/LoadingBox';
 import MessageBox from '../../Components/MessageBox';
-import { ORDER_STATUS_UPDATE_RESET_ADMIN, ORDER_DELETE_RESET } from '../../Constants/OrderConstants';
+import { ORDER_STATUS_UPDATE_RESET_ADMIN } from '../../Constants/OrderConstants';
 
 export default function AdminOrderList(props) {
   const adminOrderList = useSelector((state) => state.adminOrderList);
   const { loading, error, orders } = adminOrderList;
-  // const orderDelete = useSelector((state) => state.orderDelete);
   const [status, setOrderStatus] = useState('');
   const orderStatusUpdate = useSelector((state) => state.orderStatusUpdate);
   const {
@@ -17,38 +16,11 @@ export default function AdminOrderList(props) {
     success: successStatusUpdate,
   } = orderStatusUpdate;
 
-  // const {
-  //   loading: loadingDelete,
-  //   error: errorDelete,
-  //   success: successDelete,
-  // } = orderDelete;
   const dispatch = useDispatch();
   useEffect(() => {
-    if (successStatusUpdate) {
-      dispatch({ type: ORDER_STATUS_UPDATE_RESET_ADMIN });
-      props.history.push('/admin/orderlist');
-    }
+    dispatch({ type: ORDER_STATUS_UPDATE_RESET_ADMIN });
     dispatch(adminListOrders());
-  }, [dispatch, successStatusUpdate, props.history]);
-  // useEffect(() => {
-  //   if (successStatusUpdate) {
-  //     dispatch({ type: ORDER_STATUS_UPDATE_RESET });
-  //     props.history.push('/orderlist');
-  //     dispatch(adminListOrders());
-  //   }
-  //   // if(!order || order._id !== orderId || successStatusUpdate){
-  //   //   dispatch({ type: ORDER_STATUS_UPDATE_RESET });
-  //   //   dispatch(adminListOrders());
-  //   // } else{
-  //   //   setOrderStatus(order.status);
-  //   // }
-  // }, [dispatch, successStatusUpdate, props.history]);
-
-  // const deleteHandler = (order) => {
-  //   if (window.confirm('Are you sure to delete?')) {
-  //     dispatch(deleteOrder(order._id));
-  //   }
-  // };
+  }, [dispatch, successStatusUpdate]);
 
   const orderStatusHandler = (order) => {
     dispatch(updateOrderStatusAdmin({_id: order._id, status}));
@@ -57,6 +29,15 @@ export default function AdminOrderList(props) {
   return (
     <div>
       <h1>Orders</h1>
+      <button>
+        Pending
+      </button>
+      <button>
+        Accepted
+      </button>
+      <button>
+        Delivered
+      </button>
       {loadingStatusUpdate && <LoadingBox></LoadingBox>}
       {errorStatusUpdate && <MessageBox variant="danger">{errorStatusUpdate}</MessageBox>}
       {loading ? (
@@ -74,7 +55,7 @@ export default function AdminOrderList(props) {
               <th>PAID</th>
               <th>ORDER STATUS</th>
               <th>CHANGE ORDER STATUS</th>
-              <th>ACTIONS</th>
+              <th>SHOW PRODUCT DETAILS</th>
             </tr>
           </thead>
           <tbody>
@@ -94,7 +75,7 @@ export default function AdminOrderList(props) {
                     id='changeOrderStatus'
                     onChange={(e) => setOrderStatus(e.target.value)}
                   >
-                  <option>Change Order Status</option>
+                  <option>----</option>
                   <option value='Pending'>Pending</option>  
                   <option value='Accepted'>Accepted</option>  
                   <option value='Delivered'>Delivered</option>
